@@ -7,7 +7,8 @@
     "dev": "npm run build --prefix client && node server/server.js",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
     "start": "node server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd client && npm install"
   },
   "author": "sangam mukherjee",
   "license": "ISC",
@@ -26,5 +27,8 @@
   },
   "devDependencies": {
     "vite": "^6.0.6"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

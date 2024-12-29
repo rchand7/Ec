@@ -1,15 +1,16 @@
+require("dotenv").config(); // Load environment variables
 const paypal = require("paypal-rest-sdk"); // Import PayPal SDK
 
-// Validate that the necessary environment variables are available
-if (!process.env.PAYPAL_MODE || !process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
-  throw new Error("Missing PayPal environment variables: PAYPAL_MODE, PAYPAL_CLIENT_ID, or PAYPAL_CLIENT_SECRET.");
-}
+// Log the environment variables to check if they are being loaded correctly
+console.log('PAYPAL_MODE:', process.env.PAYPAL_MODE);
+console.log('PAYPAL_CLIENT_ID:', process.env.PAYPAL_CLIENT_ID);
+console.log('PAYPAL_CLIENT_SECRET:', process.env.PAYPAL_CLIENT_SECRET);
 
 // Configure PayPal SDK
 paypal.configure({
-  mode: "sandbox", // Use "sandbox" or "live" based on your environment
-  client_id: "AfixF2u6YvdBL-ZbWY1DhbQmFAsO4mSLUZmr5DaE3CVbMu8oh8DYc7jRytPs9_A-RHEBtu3beVRqChPI", // PayPal Client ID
-  client_secret: "EMsrMg0CufBOjwlTIDNKhieTs2BMbk5MW0v4lMfw02Q7HZ7whupvQ0CJ5gcuDMv7_2KHXRcqz5g5ssTd", // PayPal Client Secret
+  mode: process.env.PAYPAL_MODE, // Use environment variable for mode ("sandbox" or "live")
+  client_id: process.env.PAYPAL_CLIENT_ID, // PayPal Client ID from environment
+  client_secret: process.env.PAYPAL_CLIENT_SECRET, // PayPal Client Secret from environment
 });
 
 module.exports = paypal; // Export PayPal SDK configuration

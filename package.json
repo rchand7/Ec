@@ -2,9 +2,10 @@
   "name": "ecommerce-project",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon server/server.js",
+    "dev": "npm run build --prefix client && node server/index.js",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
-    "start": "nodemon server/server.js"
+    "start": "node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

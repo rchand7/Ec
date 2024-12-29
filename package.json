@@ -1,17 +1,11 @@
 {
-  "name": "server",
+  "name": "ecommerce-project",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
   "scripts": {
-    "dev": "npm run build --prefix client && node server/server.js",
+    "dev": "nodemon server/server.js",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
-    "start": "node server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cd client && npm install"
+    "start": "nodemon server/server.js"
   },
-  "author": "sangam mukherjee",
-  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
@@ -26,9 +20,6 @@
     "paypal-rest-sdk": "^1.8.1"
   },
   "devDependencies": {
-    "vite": "^6.0.6"
-  },
-  "engines": {
-    "node": ">=22.12.0"
+    "vite": "^5.4.11"
   }
 }

@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 // CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:5173", // Client URL (hardcoded for development)
+    origin: "https://ec-1-1an1.onrender.com", // Client URL (hardcoded for development)
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
@@ -77,8 +77,8 @@ app.post("/api/paypal/payment", (req, res) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: "http://localhost:5000/api/paypal/success",
-      cancel_url: "http://localhost:5000/api/paypal/cancel",
+      return_url: "https://ec-1-1an1.onrender.com/api/paypal/success",
+      cancel_url: "https://ec-1-1an1.onrender.com/api/paypal/cancel",
     },
     transactions: [
       {

@@ -1,24 +1,22 @@
-require('dotenv').config();  // Load environment variables
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
-const paypal = require('paypal-rest-sdk');  // Import PayPal SDK
+const paypal = require("paypal-rest-sdk"); // Import PayPal SDK
 
 // PayPal configuration
 paypal.configure({
-  mode: process.env.PAYPAL_MODE || 'sandbox',  // Sandbox or live mode
-  client_id: process.env.PAYPAL_CLIENT_ID,
-  client_secret: process.env.PAYPAL_SECRET
+  mode: "sandbox", // "sandbox" or "live" mode
+  client_id: "AfixF2u6YvdBL-ZbWY1DhbQmFAsO4mSLUZmr5DaE3CVbMu8oh8DYc7jRytPs9_A-RHEBtu3beVRqChPI", // Your PayPal client ID
+  client_secret: "EMsrMg0CufBOjwlTIDNKhieTs2BMbk5MW0v4lMfw02Q7HZ7whupvQ0CJ5gcuDMv7_2KHXRcqz5g5ssTd", // Your PayPal client secret
 });
 
-// Log environment variable for debugging
-console.log('MONGO_URI:', process.env.MONGO_URI);
+// MongoDB URI (hardcoded directly in the code)
+const mongoUri = "mongodb+srv://chandrohitsumit:dLy7NEAG1GGHvsmb@cluster0.g0yy5.mongodb.net/test";
 
-// Create a database connection
 mongoose
-  .connect(process.env.MONGO_URI) // Use the environment variable for Mongo URI
+  .connect(mongoUri) // MongoDB connection using the URI directly
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log("MongoDB connection error:", error));
 
@@ -28,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173", // Use environment variable or fallback to localhost for dev
+    origin: "http://localhost:5173", // Client URL (hardcoded for development)
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: [
       "Content-Type",
@@ -74,21 +72,23 @@ app.use("/api/common/feature", commonFeatureRouter);
 // PayPal Routes
 app.post("/api/paypal/payment", (req, res) => {
   const paymentData = {
-    intent: 'sale',
+    intent: "sale",
     payer: {
-      payment_method: 'paypal',
+      payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: 'http://localhost:5000/api/paypal/success',
-      cancel_url: 'http://localhost:5000/api/paypal/cancel',
+      return_url: "http://localhost:5000/api/paypal/success",
+      cancel_url: "http://localhost:5000/api/paypal/cancel",
     },
-    transactions: [{
-      amount: {
-        total: req.body.amount,  // Amount to be charged
-        currency: 'USD',
+    transactions: [
+      {
+        amount: {
+          total: req.body.amount, // Amount to be charged
+          currency: "USD",
+        },
+        description: "Your purchase description",
       },
-      description: 'Your purchase description',
-    }],
+    ],
   };
 
   paypal.payment.create(paymentData, (error, payment) => {
@@ -97,7 +97,7 @@ app.post("/api/paypal/payment", (req, res) => {
       res.status(500).send(error);
     } else {
       for (let i = 0; i < payment.links.length; i++) {
-        if (payment.links[i].rel === 'approval_url') {
+        if (payment.links[i].rel === "approval_url") {
           res.json({ approval_url: payment.links[i].href });
         }
       }
@@ -119,18 +119,18 @@ app.get("/api/paypal/success", (req, res) => {
       console.error(error);
       res.status(500).send(error);
     } else {
-      res.json({ message: 'Payment successful!', payment });
+      res.json({ message: "Payment successful!", payment });
     }
   });
 });
 
 // Cancel Route
 app.get("/api/paypal/cancel", (req, res) => {
-  res.status(200).send('Payment cancelled');
+  res.status(200).send("Payment cancelled");
 });
 
 // Preflight handling (for OPTIONS requests)
-app.options('*', cors());  // Allow preflight requests for all routes
+app.options("*", cors()); // Allow preflight requests for all routes
 
 // Serve static files for production (client build folder)
 if (process.env.NODE_ENV === "production") {
